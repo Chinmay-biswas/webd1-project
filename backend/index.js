@@ -1,57 +1,48 @@
-//const express = require('express');
-//npm i nodemon -d
-//npm run dev
-import express from 'express';
-import dotenv from 'dotenv';
-dotenv.config(); // Load environment variables from .env file
-import { connectDB } from './config/db.js'; // Adjust the path as necessary
-import productRoutes from './routes/product.route.js'; // Adjust the path as necessary
-import mongoose from 'mongoose';
-import Product from "./models/products.models.js";
-import cors from 'cors';
-import { fileURLToPath } from 'url';
-import path from 'path';
+// index.js
+import express from 'express'
+import dotenv from 'dotenv'
+import cors  from 'cors'
+import path  from 'path'
+import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { connectDB }     from './config/db.js'
+import productRoutes     from './routes/product.route.js'
 
+dotenv.config()
 
+// ——— shim __dirname & __filename in ES modules ———
+const __filename = fileURLToPath(import.meta.url)
+const _dirname  = path.dirname(_filename)
 
-const app = express();
+// ——— express setup ———
+const app = express()
+connectDB()
 
-app.get("/api", (req, res) => {
-  res.send("API is running...");
-});
- 
-app.use(express.json()); //allow us to accept JSON data in the req.body
-
-app.use("/api/products",productRoutes); // Use the product routes
-const PORT = process.env.PORT || 5000; // Use the port from environment variables or default to 5000
-
-
-// Allow only your frontend URL (local or deployed)
+app.use(express.json())
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://your-frontend-url.vercel.app'],
-  credentials: true // only if you're using cookies/auth
-}));
+  origin: ['http://localhost:5173'],
+  credentials: true
+}))
 
-
+// your API routes
+app.use('/api/products', productRoutes)
 
 if (process.env.NODE_ENV === 'production') {
-  const clientBuildPath = path.join(__dirname, 'client/build');
-  app.use(express.static(clientBuildPath));
+  // point to Vite’s build output
+  const clientDist = path.join(__dirname, 'client', 'dist')
 
-  // any request that falls through (and isn’t /api) will serve index.html
-  app.use((req, res, next) => {
-    if (req.path.startsWith('/api/')) return next();
-    res.sendFile(path.join(clientBuildPath, 'index.html'));
-  });
+  // serve static files
+  app.use(express.static(clientDist))
+
+  // anything that isn't /api -> index.html
+  app.get('*', (req, res) => {
+    // if the request starts with /api, skip back to the router
+    if (req.path.startsWith('/api/')) return res.status(404).end()
+    res.sendFile(path.join(clientDist, 'index.html'))
+  })
 }
 
+const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
-  connectDB(); // Connect to MongoDB
-  console.log(`Server is running on port http://localhost:${PORT}`);
-  
-});   
-//WYEiI1ymuM6tVJ89 
-////WYEiI1ymuM6tVJ89
+  console.log(🚀 Listening on http://localhost:${PORT})
+})
