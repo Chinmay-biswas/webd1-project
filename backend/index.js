@@ -29,7 +29,16 @@ app.use(cors({
   credentials: true // only if you're using cookies/auth
 }));
 
+if (process.env.NODE_ENV === 'production') {
+  const clientBuildPath = path.join(__dirname, 'client/build');
+  app.use(express.static(clientBuildPath));
 
+  // any request that falls through (and isn’t /api) will serve index.html
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/api/')) return next();
+    res.sendFile(path.join(clientBuildPath, 'index.html'));
+  });
+}
 
 app.listen(PORT, () => {
   connectDB(); // Connect to MongoDB
