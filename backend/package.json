@@ -1,0 +1,32 @@
+{
+  "name": "webd",
+  "version": "1.0.0",
+  "main": "backend/server.js",
+  "scripts": {
+    "server": "cross-env PORT=5000 nodemon index.js",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "cd client && npm run build",
+    "render-build": "npm install && npm install --prefix client && npm run build",
+    "start": "node index.js"
+  },
+  "postinstall": "npm install --prefix client",
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "concurrently": "^9.2.0",
+    "cors": "^2.8.5",
+    "cross": "^1.0.0",
+    "dotenv": "^16.5.0",
+    "env": "^0.0.2",
+    "express": "^5.1.0",
+    "mongoose": "^8.16.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^3.1.10"
+  }
+}
