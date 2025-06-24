@@ -11,8 +11,9 @@ import productRoutes     from './routes/product.route.js'
 dotenv.config()
 
 // ——— shim __dirname & __filename in ES modules ———
-const __filename = fileURLToPath(import.meta.url)
-const _dirname  = path.dirname(_filename)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename); // 
+
 
 // ——— express setup ———
 const app = express()
