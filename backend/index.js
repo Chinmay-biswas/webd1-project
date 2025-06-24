@@ -9,7 +9,12 @@ import productRoutes from './routes/product.route.js'; // Adjust the path as nec
 import mongoose from 'mongoose';
 import Product from "./models/products.models.js";
 import cors from 'cors';
+import { fileURLToPath } from 'url';
 import path from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 
 const app = express();
@@ -29,6 +34,8 @@ app.use(cors({
   origin: ['http://localhost:5173', 'https://your-frontend-url.vercel.app'],
   credentials: true // only if you're using cookies/auth
 }));
+
+
 
 if (process.env.NODE_ENV === 'production') {
   const clientBuildPath = path.join(__dirname, 'client/build');
