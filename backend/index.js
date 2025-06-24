@@ -9,6 +9,7 @@ import productRoutes from './routes/product.route.js'; // Adjust the path as nec
 import mongoose from 'mongoose';
 import Product from "./models/products.models.js";
 import cors from 'cors';
+import path from 'path';
 
 
 const app = express();
